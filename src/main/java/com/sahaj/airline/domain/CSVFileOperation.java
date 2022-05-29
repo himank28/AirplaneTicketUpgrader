@@ -17,7 +17,6 @@ public class CSVFileOperation implements FileOperation{
 
 	@Override
 	public List<String[]> readFile(String file) throws  BusinessException {
-		
 		try {
 		FileReader filereader = new FileReader(file);
         CSVReader csvReader = new CSVReaderBuilder(filereader)

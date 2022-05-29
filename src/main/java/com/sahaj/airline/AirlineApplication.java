@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.sahaj.airline.domain.AirlineOffer;
 import com.sahaj.airline.domain.AirlineTicket;
 import com.sahaj.airline.domain.CSVFileOperation;
+import com.sahaj.airline.exception.BusinessException;
 
 @SpringBootApplication
 public class AirlineApplication {
@@ -17,20 +18,33 @@ public class AirlineApplication {
 		try {
 			FileOperation fileOperation = new CSVFileOperation();
 			AirlineOffer offer = new AirlineOffer();
-			List<AirlineTicket> tickets = new ArrayList<>();
 			List<String[]> fileData = fileOperation.readFile("/home/neebal/TravelData.csv");
-			for(String[] rows:fileData){
-				tickets.add(new AirlineTicket(rows));
-			}
-			List<AirlineTicket> offerTicket =tickets.stream().filter(offer::isOfferValid).collect(Collectors.toList());
-			offerTicket.forEach( offer::applyOffer);
-			List<AirlineTicket> failedOfferTicket =tickets.stream().filter(x->!offer.isOfferValid(x)).collect(Collectors.toList());
-			fileOperation.writeFile("sahaj/ValidOfferTickets"+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeValidOfferData(offerTicket));
+			List<AirlineTicket> tickets=getTicketFromFileData(fileData);
+			List<AirlineTicket> validOfferTickets=getValidOfferTickets(tickets,offer);
+			applyOfferToTickets(validOfferTickets,offer);
+			List<AirlineTicket> failedOfferTicket =getInvalidOfferTickets(tickets,offer);
+			fileOperation.writeFile("sahaj/ValidOfferTickets"+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeValidOfferData(validOfferTickets));
 			fileOperation.writeFile("sahaj/InvalidOfferTickets"+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeInvalidOfferData(failedOfferTicket));
 			
 		}catch( Exception  e) {
 			e.printStackTrace();
 		} 
+	}
+	private static List<AirlineTicket> getTicketFromFileData(List<String[]> fileData) throws BusinessException{
+		List<AirlineTicket> tickets = new ArrayList<>();
+		for(String[] rows:fileData){
+			tickets.add(new AirlineTicket(rows));
+		}
+		return tickets;
+	}
+	private static List<AirlineTicket> getValidOfferTickets(List<AirlineTicket> tickets, AirlineOffer offer ) {
+		return tickets.stream().filter(offer::isOfferValid).collect(Collectors.toList());
+	}
+	private static void applyOfferToTickets(List<AirlineTicket> validOfferTickets, AirlineOffer offer ) {
+		validOfferTickets.forEach( offer::applyOffer);
+	}
+	private static List<AirlineTicket> getInvalidOfferTickets(List<AirlineTicket> tickets, AirlineOffer offer ) {
+		return tickets.stream().filter(x->!offer.isOfferValid(x)).collect(Collectors.toList());
 	}
 
 }
