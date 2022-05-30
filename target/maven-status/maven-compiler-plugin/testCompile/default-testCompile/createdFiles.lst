@@ -1,2 +1,4 @@
+com/sahaj/airline/model/CsvFileOperationTest.class
+com/sahaj/airline/model/AirlineTicketTest.class
 com/sahaj/airline/AirlineApplicationTests.class
-com/sahaj/airline/test/AirlineOfferTest.class
+com/sahaj/airline/model/AirlineOfferTest.class
