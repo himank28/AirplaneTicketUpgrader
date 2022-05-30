@@ -47,7 +47,7 @@ public class AirlineTicket {
 				this.mobilePhone=data[TicketFileKey.MOBILE.getIndex()].trim();
 				this.bookedCabin=data[TicketFileKey.BOOKED_CABIN.getIndex()].trim();
 		}catch(Exception e) {
-			throw new BusinessException("Bad Data in File");
+			throw new BusinessException("Invalid format data in file");
 		}
 	}
 	public AirlineTicket() {};

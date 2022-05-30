@@ -36,7 +36,7 @@ public class CSVFileOperation implements FileOperation{
 			writer.writeAll(data);
 			writer.close();
 			}else {
-				System.out.println("Not created");
+				throw new BusinessException("Unable to create file");
 			}
 		}
 		catch (IOException e) {

@@ -15,16 +15,19 @@ import com.sahaj.airline.exception.BusinessException;
 public class AirlineApplication {
 
 	public static void main(String[] args) {
+		String inputFilePath = "sahaj/TravelData.csv";
+		String validOfferFilePath = "sahaj/ValidOfferTickets";
+		String invalidOfferFilePath = "sahaj/InvalidOfferTickets";
 		try {
 			FileOperation fileOperation = new CSVFileOperation();
 			AirlineOffer offer = new AirlineOffer();
-			List<String[]> fileData = fileOperation.readFile("/home/neebal/TravelData.csv");
+			List<String[]> fileData = fileOperation.readFile(inputFilePath);
 			List<AirlineTicket> tickets=getTicketFromFileData(fileData);
 			List<AirlineTicket> validOfferTickets=getValidOfferTickets(tickets,offer);
 			applyOfferToTickets(validOfferTickets,offer);
 			List<AirlineTicket> failedOfferTicket =getInvalidOfferTickets(tickets,offer);
-			fileOperation.writeFile("sahaj/ValidOfferTickets"+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeValidOfferData(validOfferTickets));
-			fileOperation.writeFile("sahaj/InvalidOfferTickets"+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeInvalidOfferData(failedOfferTicket));
+			fileOperation.writeFile(validOfferFilePath+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeValidOfferData(validOfferTickets));
+			fileOperation.writeFile(invalidOfferFilePath+Calendar.getInstance().getTimeInMillis()+".csv", offer.writeInvalidOfferData(failedOfferTicket));
 			
 		}catch( Exception  e) {
 			e.printStackTrace();
