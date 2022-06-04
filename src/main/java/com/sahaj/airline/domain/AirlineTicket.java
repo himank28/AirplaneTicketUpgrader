@@ -3,37 +3,44 @@ package com.sahaj.airline.domain;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.sahaj.airline.OfferChain;
 import com.sahaj.airline.constants.Constant;
+import com.sahaj.airline.enums.Cabin;
 import com.sahaj.airline.enums.TicketFileKey;
-import com.sahaj.airline.exception.BusinessException;
+import com.sahaj.airline.exception.InvalidFileFormatException;
+import com.sahaj.airline.utility.DataValidationUtility;
 
 public class AirlineTicket {
 	
 	private String firstName;
-	
 	private String lastName;
-	
 	private String pnr;
-
 	private String fareClass;
-
 	private Date travelDate;
-	
 	private String pax;
-	
 	private Date ticketingDate;
-
 	private String email;
-
 	private String mobilePhone;
-
 	private String bookedCabin;
-	
 	private String discountCode;
-	
 	private String error;
+	private boolean isValid;
 
-	public AirlineTicket(String[] data) throws BusinessException {
+	public AirlineTicket(TicketBuilder builder) {
+		this.firstName=builder.firstName;
+		this.lastName=builder.lastName;
+		this.pnr=builder.pnr;
+		this.fareClass=builder.fareClass;
+		this.travelDate=builder.travelDate;
+		this.pax=builder.pax;
+		this.ticketingDate=builder.ticketingDate;
+		this.email=builder.email;
+		this.mobilePhone=builder.mobilePhone;
+		this.bookedCabin=builder.bookedCabin;
+	}
+	public AirlineTicket(String[] data) throws InvalidFileFormatException {
 		try {
 				SimpleDateFormat sdf = new SimpleDateFormat(Constant.FILE_DATE_FORMAT);
 				this.firstName=data[TicketFileKey.FIRST_NAME.getIndex()].trim();
@@ -47,10 +54,10 @@ public class AirlineTicket {
 				this.mobilePhone=data[TicketFileKey.MOBILE.getIndex()].trim();
 				this.bookedCabin=data[TicketFileKey.BOOKED_CABIN.getIndex()].trim();
 		}catch(Exception e) {
-			throw new BusinessException("Invalid format data in file");
+			throw new InvalidFileFormatException("Invalid format data in file");
 		}
 	}
-	public AirlineTicket() {};
+	public AirlineTicket() {}
 
 	public void writeTicketData(String[] dataCol) {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constant.FILE_DATE_FORMAT);
@@ -80,6 +87,7 @@ public class AirlineTicket {
 		headerCol[TicketFileKey.FIRST_NAME.getIndex()]= TicketFileKey.FIRST_NAME.getValue();
 		headerCol[TicketFileKey.FIRST_NAME.getIndex()]= TicketFileKey.FIRST_NAME.getValue();
 	}	
+
 	
 	public String getFirstName() {
 		return firstName;
@@ -169,18 +177,76 @@ public class AirlineTicket {
 		this.ticketingDate = ticketingDate;
 	}
 
-	@Override
-	public String toString() {
-		return (firstName != null ? firstName + ", " : "") + (lastName != null ? lastName + ", " : "")
-				+ (pnr != null ? pnr + ", " : "") + (fareClass != null ? fareClass + ", " : "")
-				+ (travelDate != null ? travelDate + ", " : "") + (pax != null ? pax + ", " : "")
-				+ (ticketingDate != null ? ticketingDate + ", " : "") + (email != null ? email + ", " : "")
-				+ (mobilePhone != null ? mobilePhone + ", " : "") + (bookedCabin != null ? bookedCabin + ", " : "")
-				+ (discountCode != null ? discountCode + ", " : "") + (error != null ? error : "");
+	public boolean isValid() {
+		return isValid;
 	}
-
-
-
-
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
+	}
 	
+
+	public static class TicketBuilder {
+		private String firstName;
+		private String lastName;
+		private String pnr;
+		private String fareClass;
+		private Date travelDate;
+		private String pax;
+		private Date ticketingDate;
+		private String email;
+		private String mobilePhone;
+		private String bookedCabin;
+	
+		public TicketBuilder(String email, String mobilePhone, String bookedCabin,String pnr, Date travelDate, Date ticketingDate ) {
+			this.email = email;
+			this.mobilePhone = mobilePhone;
+			this.bookedCabin = bookedCabin;
+			this.pnr = pnr;
+			this.travelDate = travelDate;
+			this.ticketingDate = ticketingDate;
+	
+		}
+		public TicketBuilder firstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+		public TicketBuilder lastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+		public TicketBuilder fareClass(String fareClass) {
+			this.fareClass = fareClass;
+			return this;
+		}
+		public TicketBuilder pax(String pax) {
+			this.pax = pax;
+			return this;
+		}
+	
+		public AirlineTicket build() {
+			AirlineTicket ticket =  new AirlineTicket(this);
+			validateTicket(ticket);
+			new OfferChain().process(ticket);
+			return ticket;
+		}
+		private void validateTicket(AirlineTicket ticket) {
+				if(StringUtils.isEmpty(ticket.getEmail()) || !DataValidationUtility.isPatternMatch(ticket.getEmail(), Constant.EMAIL_PATTERN)) {
+					setError(ticket,Constant.EMAIL_INVALID);
+				}else if(StringUtils.isEmpty(ticket.getMobilePhone()) || !DataValidationUtility.isPatternMatch(ticket.getMobilePhone(), Constant.MOBILE_PATTERN)) {
+					setError(ticket,Constant.MOBILE_INVALID);
+				}else if (StringUtils.isEmpty(ticket.getBookedCabin()) || Cabin.findByValue(ticket.getBookedCabin())==null) {
+					setError(ticket,Constant.CABIN_INVALID);
+				}else if (StringUtils.isEmpty(ticket.getPnr()) || this.pnr.length()!=6 || !DataValidationUtility.isPatternMatch(this.pnr, Constant.ALPHA_NUMERIC_PATTERN)) {
+					setError(ticket,Constant.PNR_INVALID);
+				}else if (ticket.getTicketingDate()==null || ticket.getTravelDate()==null || !this.ticketingDate.before(this.travelDate)) {
+					setError(ticket,Constant.TICKET_DATE_INVALID);
+				}else {
+					ticket.setValid(true);
+				}
+		}
+		private void setError(AirlineTicket ticket,String error) {
+			ticket.setError(error);
+			ticket.setValid(false);
+		}
+	}
 }
