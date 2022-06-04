@@ -32,7 +32,7 @@ public class CSVFileOperation implements FileOperation{
     @Value("${destInvalidFile}")
 	private String destInvalidFile="sahaj/InvalidOfferTickets";
 
-	public List<String[]> readFile(String file) throws  InvalidFileFormatException {
+	private List<String[]> readFile(String file) throws  InvalidFileFormatException {
 		try {
 		FileReader filereader = new FileReader(file);
         CSVReader csvReader = new CSVReaderBuilder(filereader)
@@ -49,7 +49,7 @@ public class CSVFileOperation implements FileOperation{
 			for(String[] rows:readFile(srcFile)){
 				tickets.add(getTicket(rows));
 			}
-		}catch(Exception e) {
+		}catch(ParseException e) {
 			e.printStackTrace();
 			throw new InvalidFileFormatException("Invalid format data in file");
 		}
@@ -71,7 +71,7 @@ public class CSVFileOperation implements FileOperation{
 				.build();
 	}
 	
-	public void writeFile(String filePath, List<String[]> data) throws InvalidFileFormatException {
+	private void writeFile(String filePath, List<String[]> data) throws InvalidFileFormatException {
 		File file = new File(filePath);
 		try {
 			if(file.createNewFile()) {

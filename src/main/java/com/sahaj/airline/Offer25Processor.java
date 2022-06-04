@@ -12,7 +12,7 @@ public class Offer25Processor extends OfferProcessor{
     public void process(AirlineTicket ticket)
     {
 		char fare=ticket.getFareClass().charAt(0);
-		if(fare>='L'  && fare<='R') {
+		if(ticket.isValid() && fare>='L'  && fare<='R') {
 			ticket.setDiscountCode(OfferType.OFFER_25.name());
 		}else
         {
