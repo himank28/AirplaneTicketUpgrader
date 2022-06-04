@@ -8,10 +8,10 @@ abstract class OfferProcessor {
  
     OfferProcessor(OfferProcessor nextProcessor){
         this.nextProcessor = nextProcessor;
-    };
+    }
      
     public void process(AirlineTicket ticket){
         if(nextProcessor != null)
             nextProcessor.process(ticket);
-    };
+    }
 }

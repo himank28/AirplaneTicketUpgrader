@@ -1,6 +1,5 @@
 package com.sahaj.airline.domain;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +8,6 @@ import com.sahaj.airline.OfferChain;
 import com.sahaj.airline.constants.Constant;
 import com.sahaj.airline.enums.Cabin;
 import com.sahaj.airline.enums.TicketFileKey;
-import com.sahaj.airline.exception.InvalidFileFormatException;
 import com.sahaj.airline.utility.DataValidationUtility;
 
 public class AirlineTicket {
@@ -40,38 +38,7 @@ public class AirlineTicket {
 		this.mobilePhone=builder.mobilePhone;
 		this.bookedCabin=builder.bookedCabin;
 	}
-	public AirlineTicket(String[] data) throws InvalidFileFormatException {
-		try {
-				SimpleDateFormat sdf = new SimpleDateFormat(Constant.FILE_DATE_FORMAT);
-				this.firstName=data[TicketFileKey.FIRST_NAME.getIndex()].trim();
-				this.lastName=data[TicketFileKey.LAST_NAME.getIndex()].trim();
-				this.pnr=data[TicketFileKey.PNR.getIndex()].trim();
-				this.fareClass=data[TicketFileKey.FARE_CLASS.getIndex()].trim();
-				this.travelDate=sdf.parse(data[TicketFileKey.TRAVEL_DATE.getIndex()].trim());
-				this.pax=data[TicketFileKey.PAX.getIndex()].trim();
-				this.ticketingDate=sdf.parse(data[TicketFileKey.TICKET_DATE.getIndex()].trim());
-				this.email=data[TicketFileKey.EMAIL.getIndex()].trim();
-				this.mobilePhone=data[TicketFileKey.MOBILE.getIndex()].trim();
-				this.bookedCabin=data[TicketFileKey.BOOKED_CABIN.getIndex()].trim();
-		}catch(Exception e) {
-			throw new InvalidFileFormatException("Invalid format data in file");
-		}
-	}
-	public AirlineTicket() {}
 
-	public void writeTicketData(String[] dataCol) {
-		SimpleDateFormat sdf = new SimpleDateFormat(Constant.FILE_DATE_FORMAT);
-		dataCol[TicketFileKey.FIRST_NAME.getIndex()]=this.firstName;
-		dataCol[TicketFileKey.LAST_NAME.getIndex()]=this.lastName;
-		dataCol[TicketFileKey.PNR.getIndex()]=this.pnr;
-		dataCol[TicketFileKey.FARE_CLASS.getIndex()]=this.fareClass;
-		dataCol[TicketFileKey.TRAVEL_DATE.getIndex()]=sdf.format(this.travelDate);
-		dataCol[TicketFileKey.PAX.getIndex()]=this.pax;;
-		dataCol[TicketFileKey.TICKET_DATE.getIndex()]=sdf.format(this.ticketingDate);
-		dataCol[TicketFileKey.EMAIL.getIndex()]=this.email;
-		dataCol[TicketFileKey.MOBILE.getIndex()]=this.mobilePhone;
-		dataCol[TicketFileKey.BOOKED_CABIN.getIndex()]=this.bookedCabin;
-	}
 	
 	public static void writeTicketHeader(String[] headerCol) {
 		headerCol[TicketFileKey.FIRST_NAME.getIndex()]= TicketFileKey.FIRST_NAME.getValue();

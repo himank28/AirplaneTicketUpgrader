@@ -96,7 +96,7 @@ public class CSVFileOperation implements FileOperation{
         rows.add(headerCol);
     	for(AirlineTicket ticket:tickets)	{
     		String[] dataCol = new String[colSize];
-    		ticket.writeTicketData( dataCol);
+    		writeTicketData( dataCol,ticket);
     		dataCol[TicketFileKey.DISCOUNT_CODE.getIndex()]=ticket.getDiscountCode();
     		rows.add(dataCol);
     	}
@@ -112,7 +112,7 @@ public class CSVFileOperation implements FileOperation{
         rows.add(headerCol);
     	for(AirlineTicket ticket:tickets)	{
     		String[] dataCol = new String[colSize];
-    		ticket.writeTicketData( dataCol);
+    		writeTicketData( dataCol,ticket);
     		dataCol[TicketFileKey.ERROR.getIndex()]=ticket.getError();
     		rows.add(dataCol);
     	}
@@ -121,4 +121,18 @@ public class CSVFileOperation implements FileOperation{
 	private String getFileNameWithTimestamp(String file) {
 		return file+Calendar.getInstance().getTimeInMillis()+".csv";
 	}
+	private void writeTicketData(String[] dataCol, AirlineTicket ticket) {
+		SimpleDateFormat sdf = new SimpleDateFormat(Constant.FILE_DATE_FORMAT);
+		dataCol[TicketFileKey.FIRST_NAME.getIndex()]=ticket.getFirstName();
+		dataCol[TicketFileKey.LAST_NAME.getIndex()]=ticket.getLastName();
+		dataCol[TicketFileKey.PNR.getIndex()]=ticket.getPnr();
+		dataCol[TicketFileKey.FARE_CLASS.getIndex()]=ticket.getFareClass();
+		dataCol[TicketFileKey.TRAVEL_DATE.getIndex()]=sdf.format(ticket.getTravelDate());
+		dataCol[TicketFileKey.PAX.getIndex()]=ticket.getPax();
+		dataCol[TicketFileKey.TICKET_DATE.getIndex()]=sdf.format(ticket.getTicketingDate());
+		dataCol[TicketFileKey.EMAIL.getIndex()]=ticket.getEmail();
+		dataCol[TicketFileKey.MOBILE.getIndex()]=ticket.getMobilePhone();
+		dataCol[TicketFileKey.BOOKED_CABIN.getIndex()]=ticket.getBookedCabin();
+	}
+
 }
