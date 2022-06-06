@@ -1,3 +1,5 @@
 /home/neebal/Projects/test/AirplaneTicketUpgrader/src/test/java/com/sahaj/airline/model/AirlineTicketTest.java
 /home/neebal/Projects/test/AirplaneTicketUpgrader/src/test/java/com/sahaj/airline/model/CsvFileOperationTest.java
 /home/neebal/Projects/test/AirplaneTicketUpgrader/src/test/java/com/sahaj/airline/AirlineApplicationTests.java
+/home/neebal/Projects/test/AirplaneTicketUpgrader/src/test/java/com/sahaj/airline/model/OfferChainTest.java
+/home/neebal/Projects/test/AirplaneTicketUpgrader/src/test/java/com/sahaj/airline/model/TicketUpgradeTest.java

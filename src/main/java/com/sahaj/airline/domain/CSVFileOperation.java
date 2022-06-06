@@ -19,6 +19,8 @@ import com.opencsv.exceptions.CsvException;
 import com.sahaj.airline.FileOperation;
 import com.sahaj.airline.constants.Constant;
 import com.sahaj.airline.enums.TicketFileKey;
+import com.sahaj.airline.exception.InvalidDataFormatException;
+import com.sahaj.airline.exception.InvalidFileCreationPathException;
 import com.sahaj.airline.exception.InvalidFileFormatException;
 
 public class CSVFileOperation implements FileOperation{
@@ -43,15 +45,14 @@ public class CSVFileOperation implements FileOperation{
 			throw new InvalidFileFormatException(e.getMessage());
 		}
 	}
-	public  List<AirlineTicket> getTicketsFromFile() throws InvalidFileFormatException{
+	public  List<AirlineTicket> getTicketsFromFile(String file) throws InvalidDataFormatException, InvalidFileFormatException{
 		List<AirlineTicket> tickets = new ArrayList<>();
 		try {
-			for(String[] rows:readFile(srcFile)){
+			for(String[] rows:readFile(file)){
 				tickets.add(getTicket(rows));
 			}
-		}catch(ParseException e) {
-			e.printStackTrace();
-			throw new InvalidFileFormatException("Invalid format data in file");
+		}catch(ArrayIndexOutOfBoundsException | NullPointerException |ParseException e) {
+			throw new InvalidDataFormatException(e.getMessage());
 		}
 		return tickets;
 	}
@@ -71,7 +72,7 @@ public class CSVFileOperation implements FileOperation{
 				.build();
 	}
 	
-	private void writeFile(String filePath, List<String[]> data) throws InvalidFileFormatException {
+	private void writeFile(String filePath, List<String[]> data) throws InvalidFileCreationPathException {
 		File file = new File(filePath);
 		try {
 			if(file.createNewFile()) {
@@ -80,14 +81,14 @@ public class CSVFileOperation implements FileOperation{
 			writer.writeAll(data);
 			writer.close();
 			}else {
-				throw new InvalidFileFormatException("Unable to create file");
+				throw new InvalidFileCreationPathException("Unable to create file");
 			}
 		}
 		catch (IOException e) {
-			throw new InvalidFileFormatException(e.getMessage());
+			throw new InvalidFileCreationPathException(e.getMessage());
 		}
 	}
-	public void writeValidOfferData(List<AirlineTicket> tickets) throws InvalidFileFormatException {
+	public void writeValidOfferData(List<AirlineTicket> tickets) throws InvalidFileCreationPathException {
 		List<String[]> rows = new ArrayList<>();
 		int colSize=11;
 		String[] headerCol = new String[colSize];
@@ -103,7 +104,7 @@ public class CSVFileOperation implements FileOperation{
     	writeFile(getFileNameWithTimestamp(destValidFile),rows);
 	}
 
-	public void writeInvalidOfferData(List<AirlineTicket> tickets) throws InvalidFileFormatException {
+	public void writeInvalidOfferData(List<AirlineTicket> tickets) throws InvalidFileCreationPathException {
 		List<String[]> rows = new ArrayList<>();
 		int colSize=11;
 		String[] headerCol = new String[colSize];

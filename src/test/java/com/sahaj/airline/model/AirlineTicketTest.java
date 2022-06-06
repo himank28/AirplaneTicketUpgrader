@@ -1,41 +1,32 @@
-//package com.sahaj.airline.model;
-//
-//import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
-//import java.util.Date;
-//
-//import org.junit.jupiter.api.Test;
-//
-//import com.sahaj.airline.domain.AirlineTicket;
-//
-//public class AirlineTicketTest {
-//    @Test
-//    public void testWriteTicketDataNoException() {
-//    	AirlineTicket ticket = new AirlineTicket();
-//    	ticket.setFirstName("Abhishek");
-//    	ticket.setLastName("Kumar");
-//    	ticket.setPnr("ABC123");
-//    	ticket.setFareClass("F");
-//    	ticket.setTravelDate(new Date());
-//    	ticket.setPax("2");
-//    	ticket.setTicketingDate(new Date());
-//    	ticket.setEmail("abhishek@zzz.com");
-//    	ticket.setMobilePhone("5757575757");
-//    	ticket.setBookedCabin("Economy");
-//    	String[] data = new String[10];
-//    	assertDoesNotThrow(() -> {
-//    		ticket.writeTicketData(data);
-//        });  
-//    }
-//    @Test
-//    public void testTicketConstructorNoException() {
-//    	String [] data = {"Abhishek"," Kumar","ABC123","F",	"2019-07-31","2","2019-05-21","abhishek@zzz.com","9876543210","Economy"};
-//    	assertDoesNotThrow(() -> {
-//    		AirlineTicket ticket = new AirlineTicket(data);
-//    		assertEquals("Abhishek", ticket.getFirstName());
-//    	});  
-//    }
-//    	
-//
-//}
+package com.sahaj.airline.model;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Date;
+
+import org.apache.commons.lang3.time.DateUtils;
+import org.junit.jupiter.api.Test;
+
+import com.sahaj.airline.domain.AirlineTicket;
+import com.sahaj.airline.enums.OfferType;
+
+public class AirlineTicketTest {
+    @Test
+    public void testTicketBuilderNoException() {
+    	assertDoesNotThrow(() -> {
+    		AirlineTicket ticket = new AirlineTicket.TicketBuilder("abhishek@zzz.com","5757575757","Economy","ABC123",new Date(),DateUtils.addDays(new Date(), -1))
+    				.firstName("Abhishek").fareClass("A").pax("2").lastName("Kumarr").build();
+    		assertEquals("Abhishek", ticket.getFirstName());
+        });  
+    }
+    @Test
+    public void testTicketValidateNoException() {
+    	assertDoesNotThrow(() -> {
+    		AirlineTicket ticket = new AirlineTicket.TicketBuilder("abhishek@zzz.com","5757575757","Economy","ABC123",new Date(),DateUtils.addDays(new Date(), -1))
+    				.firstName("Abhhishek").fareClass("A").pax("2").lastName("Kumarr").build();
+    		assertEquals(OfferType.OFFER_20.name(), ticket.getDiscountCode());
+        });  
+    }
+
+}

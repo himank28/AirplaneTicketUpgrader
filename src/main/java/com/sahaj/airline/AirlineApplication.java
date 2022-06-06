@@ -7,8 +7,12 @@ import com.sahaj.airline.service.AirlineTicketUpgradeService;
 
 public class AirlineApplication {
 	public static void main(String[] args) {
-		AirlineTicketUpgradeService upgradeService = new  AirlineTicketUpgradeService();
-		upgradeService.upgradeTickets() ;
+		try {
+			TicketUpgrade upgradeService = new  AirlineTicketUpgradeService();
+			upgradeService.upgradeTickets("sahaj/TravelData.csv") ;
+		}catch( Exception  e) {
+			e.printStackTrace();
+		} 
 	}
 
 }
