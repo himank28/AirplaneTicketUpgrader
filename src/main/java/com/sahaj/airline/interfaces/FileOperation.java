@@ -1,4 +1,4 @@
-package com.sahaj.airline;
+package com.sahaj.airline.interfaces;
 
 import java.util.List;
 

@@ -4,10 +4,10 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.sahaj.airline.OfferChain;
 import com.sahaj.airline.constants.Constant;
 import com.sahaj.airline.enums.Cabin;
 import com.sahaj.airline.enums.TicketFileKey;
+import com.sahaj.airline.interfaces.OfferChain;
 import com.sahaj.airline.utility.DataValidationUtility;
 
 public class AirlineTicket {

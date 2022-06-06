@@ -10,12 +10,12 @@ import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 
-import com.sahaj.airline.FileOperation;
 import com.sahaj.airline.domain.AirlineTicket;
 import com.sahaj.airline.domain.CSVFileOperation;
 import com.sahaj.airline.enums.Cabin;
 import com.sahaj.airline.exception.InvalidDataFormatException;
 import com.sahaj.airline.exception.InvalidFileFormatException;
+import com.sahaj.airline.interfaces.FileOperation;
 
 public class CsvFileOperationTest {
 

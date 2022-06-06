@@ -16,12 +16,12 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
-import com.sahaj.airline.FileOperation;
 import com.sahaj.airline.constants.Constant;
 import com.sahaj.airline.enums.TicketFileKey;
 import com.sahaj.airline.exception.InvalidDataFormatException;
 import com.sahaj.airline.exception.InvalidFileCreationPathException;
 import com.sahaj.airline.exception.InvalidFileFormatException;
+import com.sahaj.airline.interfaces.FileOperation;
 
 public class CSVFileOperation implements FileOperation{
 

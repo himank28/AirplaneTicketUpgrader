@@ -7,10 +7,10 @@ import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 
-import com.sahaj.airline.OfferChain;
 import com.sahaj.airline.domain.AirlineTicket;
 import com.sahaj.airline.enums.Cabin;
 import com.sahaj.airline.enums.OfferType;
+import com.sahaj.airline.interfaces.OfferChain;
 
 public class OfferChainTest {
 	@Test

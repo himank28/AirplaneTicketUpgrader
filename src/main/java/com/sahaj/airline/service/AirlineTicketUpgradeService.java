@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sahaj.airline.FileOperation;
-import com.sahaj.airline.TicketUpgrade;
 import com.sahaj.airline.domain.AirlineTicket;
 import com.sahaj.airline.domain.CSVFileOperation;
 import com.sahaj.airline.exception.InvalidDataFormatException;
 import com.sahaj.airline.exception.InvalidFileCreationPathException;
 import com.sahaj.airline.exception.InvalidFileFormatException;
+import com.sahaj.airline.interfaces.FileOperation;
+import com.sahaj.airline.interfaces.TicketUpgrade;
 
 public class AirlineTicketUpgradeService implements TicketUpgrade{
 

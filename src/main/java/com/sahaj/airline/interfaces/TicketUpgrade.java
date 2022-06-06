@@ -1,4 +1,4 @@
-package com.sahaj.airline;
+package com.sahaj.airline.interfaces;
 
 import com.sahaj.airline.exception.InvalidDataFormatException;
 import com.sahaj.airline.exception.InvalidFileCreationPathException;

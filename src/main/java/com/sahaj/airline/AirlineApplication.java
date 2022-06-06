@@ -1,6 +1,7 @@
 package com.sahaj.airline;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.sahaj.airline.interfaces.TicketUpgrade;
 import com.sahaj.airline.service.AirlineTicketUpgradeService;
 
 @SpringBootApplication

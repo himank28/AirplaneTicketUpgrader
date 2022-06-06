@@ -1,4 +1,4 @@
-package com.sahaj.airline;
+package com.sahaj.airline.interfaces;
 
 import com.sahaj.airline.domain.AirlineTicket;
 import com.sahaj.airline.domain.Offer20Processor;
